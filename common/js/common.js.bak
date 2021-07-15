@@ -1,0 +1,56 @@
+function checkValue(_val) {
+    if(_val === null || typeof _val === 'undefined' || (typeof _val === 'string' && _val === '')) {
+        return true;
+    }
+    
+    return false;
+}
+
+var __SUBMIT_FLAG__ = true; //SUBMIT 가능여부
+var __SPINNER__;
+var __SPINNER_PANEL__;
+
+function startSpinner(targetId) {
+    var opts = {
+          lines: 13 // The number of lines to draw
+        , length: 28 // The length of each line
+        , width: 14 // The line thickness
+        , radius: 42 // The radius of the inner circle
+        , scale: 0.5 // Scales overall size of the spinner
+        , corners: 1 // Corner roundness (0..1)
+        , color: '#000' // #rgb or #rrggbb or array of colors
+        , opacity: 0.6 // Opacity of the lines
+        , rotate: 0 // The rotation offset
+        , direction: 1 // 1: clockwise, -1: counterclockwise
+        , speed: 1 // Rounds per second
+        , trail: 60 // Afterglow percentage
+        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+        , zIndex: 2e9 // The z-index (defaults to 2000000000)
+        , className: 'spinner' // The CSS class to assign to the spinner
+        , top: '50%' // Top position relative to parent
+        , left: '50%' // Left position relative to parent
+        , shadow: false // Whether to render a shadow
+        , hwaccel: false // Whether to use hardware acceleration
+        , position: 'absolute' // Element positioning
+        }
+    __SPINNER__ = new Spinner(opts).spin(document.getElementById(targetId));
+    __SPINNER_PANEL__ = $('<div></div>');
+    __SPINNER_PANEL__.css('position', 'absolute');
+    __SPINNER_PANEL__.css('height', '100%');
+    __SPINNER_PANEL__.css('width', '100%');
+    __SPINNER_PANEL__.css('background-color', 'rgba(0, 0, 0, 0.2');
+    __SPINNER_PANEL__.css('z-index', '100000');
+    __SPINNER_PANEL__.prependTo($('#__CONTENT_BODY__'));
+}
+
+function stopSpinner() {
+    __SPINNER__.stop();
+}
+
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+        currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+}

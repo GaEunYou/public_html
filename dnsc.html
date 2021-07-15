@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Cache-Control" content="no-cache">
+
+<!-- css -->
+<link href="common/vender/sb-admin-v2/css/bootstrap.css" rel="stylesheet">
+<link href="common/vender/sb-admin-v2/css/plugins/timeline/timeline.css" rel="stylesheet">
+<link href="common/vender/sb-admin-v2/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="common/vender/bootstrap-datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet">
+<link href="common/vender/spin/spin.css" rel="stylesheet">
+<link href="common/vender/sb-admin-v2/css/sb-admin.css" rel="stylesheet">
+<link href="common/css/default.css" rel="stylesheet">
+<link href="common/css/ui-layout.css" rel="stylesheet">
+
+<!-- javascript -->
+<script src="common/js/common.js" ></script>
+<script src="common/vender/sb-admin-v2/js/jquery-1.10.2.js"></script>
+<script src="common/vender/sb-admin-v2/js/bootstrap.min.js"></script>
+<script src="common/vender/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="common/vender/sb-admin-v2/js/sb-admin.js"></script>
+<script src="common/vender/moment/moment.js"></script>
+<script src="common/vender/moment/moment.kr.js"></script>
+<script src="common/vender/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="common/vender/spin/spin.js" ></script>
+<script src="common/vender/highcharts/highcharts.js" ></script>
+
+<!-- data -->
+<script src="database/capital.js" ></script>
+<script src="database/seoul.js" ></script>
+
+<style>
+	table.data-table {
+		font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #3A3A3A;
+        border-collapse: collapse;
+	}
+
+    table.data-table th {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #517994;
+        background-color: #B2CFD8;
+    }
+
+    table.data-table tr:hover td {
+        background-color: #DFEBF1;
+    }
+
+    table.data-table td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #517994;
+        background-color: #ffffff;
+	}
+
+	area:focus {
+		border: none;
+		outline: none;
+		outline-style: none;
+		-moz-outline-style: none;
+	}
+
+	img
+	img a {
+		outline: none !important;
+		border: none !important;
+	}
+</style>
+
+<title>국립기상과학원 예측자료시스템</title>
+</head>
+<body id="__CONTENT_BODY__" onkeydown='javascript:doKey();' onscroll="javascript:doScroll();">
+
+	<!-- wrap -->
+	<div id="wrap">
+
+		<!-- header -->
+		<div id="header">
+			<div class="header-inner">
+				<h1 class="logo">
+					<a href="index.html">
+						<img src="common/img/logo/logo01.png" alt="책임운영기관 국립기상과학원">
+						<strong>KMAPP 예측 시스템</strong>
+					</a>
+				</h1>
+			</div>
+		</div>
+		<!-- //header -->
+
+		<!-- container -->
+		<div id="container">
+
+			<!-- content -->
+			<div id="content">
+
+				<div class="content">
+					<div class="nav nav2">
+						<div class="tit-wrap">
+							<h2>예측자료 생산</h2>
+						</div>
+						<div class="form-tag">
+							<form id="frmPred" name="frmPred">
+								<strong class="col-tit col-tit-br">날짜</strong>
+								<div class="form-group input-group input-append date date-ymdhm" data-date-format="yyyy-mm-dd">
+									<input type="text" class="form-control" name="predDate" id="predDate" />
+									<span class="input-group-addon add-on pred-Date-addon3">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+								<strong class="col-tit col-tit-br">시간 UTC</strong>
+								<select style="width:100%;" id="predTime" name="predTime">
+									<option value="00">00</option>
+									<option value="06">06</option>
+									<option value="12">12</option>
+									<option value="18">18</option>
+								</select>
+								<strong class="col-tit col-tit-br">구분</strong>
+								<select style="width:100%;" id="predType" name="predType">
+									<option value="surf">지표자료</option>
+								</select>
+								<strong class="col-tit col-tit-br">항목</strong>
+								<select style="width:100%;" id="predItem" name="predItem">
+									<option value="temperature">기온(℃)</option>
+									<option value="relhumidity">습도(%)</option>
+									<option value="visibility">시정(km)</option>
+									<option value="wind">바람(m/s)</option>
+									<option value="downward_SW_flux">태양광(W/㎡)</option>
+								</select>
+								<strong class="col-tit col-tit-br">고도(m)</strong>
+								<input type="text" class="form-control" name="predLevel" id="predLevel" value="1.5" readonly />
+							</form>
+						</div>
+						<div class="btn-wrap">
+							<button type="button" class="btn-large btn-blue" id="btnImgSearch">예측자료 생산</button>
+						</div>
+					</div>
+
+					<div class="section section2 mt0">
+						<form id="frmColor" name="frmColor">
+							<div class="tit-wrap">
+								<h2>그래픽 옵션</h2>
+							</div>
+							<div class="form-tag form-flex mt20">
+								<strong class="col-tit">색상</strong>
+								<select id="color" name="color">
+									<option value="None" selected>Default</option>
+									<option value="BlueRed">Blue-Red</option>
+									<option value="BlueYellowRed">Blue-Yellow-Red</option>
+									<option value="WhiteBlue">White-Blue</option>
+									<option value="WhiteYellowOrangeRed">White-Yellow-Orange-Red</option>
+								</select>
+								<strong class="col-tit">간격</strong>
+								<input type="text" class="ac" style="flex:1 0 55px;max-width:55px;" id="vstep" name="vstep" >
+								<strong class="col-tit">최소</strong>
+								<input type="text" class="ac" style="flex:1 0 55px;max-width:55px;" id="vmin" name="vmin" >
+								<strong class="col-tit">최대</strong>
+								<input type="text" class="ac" style="flex:1 0 55px;max-width:55px;" id="vmax" name="vmax">
+								<strong class="col-tit">크기</strong>
+								<select style="flex:1 0 65px;max-width:65px;" id="legendSize" name="legendSize">
+									<option value="1" selected>1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select>
+								<strong class="col-tit">위치</strong>
+								<select style="flex:1 0 100px;max-width:100px;" id="legendPosition" name="legendPosition">
+									<option value="vertical">세로막대</option>
+									<option value="horizontal">가로막대</option>
+								</select>
+							</div>
+							<div class="btn-wrap mt20">
+								<div class="fr">
+									<button type="button" class="btn-large btn-blue" id="btnDraw">그리기</button>
+									<button type="button" class="btn-large btn-blue" id="btnDataDown">이미지 다운로드</button>
+									<button type="button" class="btn-large btn-blue" id="btnReset">옵션설정 초기화</button>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="section section3" style="padding-top: 0px;">
+						<div id="dvImageArea" style="margin-bottom: 15px;">
+							<table border="0" cellspacing="0" cellpadding="0" style="text-align: center; border-spacing: 2px;">
+								<tr>
+									<td colspan="20" style="text-align:left;">
+										<span>날짜 : </span><span id="baseDate">YYYY-MM-DD HH</span>&nbsp;시
+									</td>
+									<td colspan="29" style="font-size:0; text-align:right;">
+									    <a href="#none" class="btn_controller_prev"><img src="common/img/ico/btn_controller_prev2.gif" alt="이전" class="big"></a>
+										<a href="#none" class="slide-play-btn on"><img src="common/img/ico/btn_controller_play2.gif" alt="재생" class="big"></a>
+										<a href="#none" class="btn_controller_next"><img src="common/img/ico/btn_controller_next2.gif" alt="다음" class="big"></a>
+									</td>
+								</tr>
+								<tr id="timeBar" height="17" bgcolor="#bbbbbb" style="font-family:Verdana; font-size:3pt; cursor:hand;">
+									<td class="tm-bar" onclick="viewImg(0);" onmouseout="viewTm(0,0);" onmouseover="viewTm(0,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(1);" onmouseout="viewTm(1,0);" onmouseover="viewTm(1,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(2);" onmouseout="viewTm(2,0);" onmouseover="viewTm(2,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(3);" onmouseout="viewTm(3,0);" onmouseover="viewTm(3,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(4);" onmouseout="viewTm(4,0);" onmouseover="viewTm(4,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(5);" onmouseout="viewTm(5,0);" onmouseover="viewTm(5,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(6);" onmouseout="viewTm(6,0);" onmouseover="viewTm(6,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(7);" onmouseout="viewTm(7,0);" onmouseover="viewTm(7,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(8);" onmouseout="viewTm(8,0);" onmouseover="viewTm(8,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(9);" onmouseout="viewTm(9,0);" onmouseover="viewTm(9,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(10);" onmouseout="viewTm(10,0);" onmouseover="viewTm(10,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(11);" onmouseout="viewTm(11,0);" onmouseover="viewTm(11,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(12);" onmouseout="viewTm(12,0);" onmouseover="viewTm(12,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(13);" onmouseout="viewTm(13,0);" onmouseover="viewTm(13,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(14);" onmouseout="viewTm(14,0);" onmouseover="viewTm(14,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(15);" onmouseout="viewTm(15,0);" onmouseover="viewTm(15,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(16);" onmouseout="viewTm(16,0);" onmouseover="viewTm(16,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(17);" onmouseout="viewTm(17,0);" onmouseover="viewTm(17,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(18);" onmouseout="viewTm(18,0);" onmouseover="viewTm(18,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(19);" onmouseout="viewTm(19,0);" onmouseover="viewTm(19,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(20);" onmouseout="viewTm(20,0);" onmouseover="viewTm(20,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(21);" onmouseout="viewTm(21,0);" onmouseover="viewTm(21,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(22);" onmouseout="viewTm(22,0);" onmouseover="viewTm(22,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(23);" onmouseout="viewTm(23,0);" onmouseover="viewTm(23,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(24);" onmouseout="viewTm(24,0);" onmouseover="viewTm(24,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(25);" onmouseout="viewTm(25,0);" onmouseover="viewTm(25,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(26);" onmouseout="viewTm(26,0);" onmouseover="viewTm(26,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(27);" onmouseout="viewTm(27,0);" onmouseover="viewTm(27,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(28);" onmouseout="viewTm(28,0);" onmouseover="viewTm(28,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(29);" onmouseout="viewTm(29,0);" onmouseover="viewTm(29,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(30);" onmouseout="viewTm(30,0);" onmouseover="viewTm(30,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(31);" onmouseout="viewTm(31,0);" onmouseover="viewTm(31,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(32);" onmouseout="viewTm(32,0);" onmouseover="viewTm(32,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(33);" onmouseout="viewTm(33,0);" onmouseover="viewTm(33,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(34);" onmouseout="viewTm(34,0);" onmouseover="viewTm(34,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(35);" onmouseout="viewTm(35,0);" onmouseover="viewTm(35,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(36);" onmouseout="viewTm(36,0);" onmouseover="viewTm(36,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(37);" onmouseout="viewTm(37,0);" onmouseover="viewTm(37,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(38);" onmouseout="viewTm(38,0);" onmouseover="viewTm(38,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(39);" onmouseout="viewTm(39,0);" onmouseover="viewTm(39,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(40);" onmouseout="viewTm(40,0);" onmouseover="viewTm(40,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(41);" onmouseout="viewTm(41,0);" onmouseover="viewTm(41,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(42);" onmouseout="viewTm(42,0);" onmouseover="viewTm(42,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(43);" onmouseout="viewTm(43,0);" onmouseover="viewTm(43,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(44);" onmouseout="viewTm(44,0);" onmouseover="viewTm(44,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(45);" onmouseout="viewTm(45,0);" onmouseover="viewTm(45,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(46);" onmouseout="viewTm(46,0);" onmouseover="viewTm(46,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(47);" onmouseout="viewTm(47,0);" onmouseover="viewTm(47,1);" >&nbsp;</td>
+									<td class="tm-bar" onclick="viewImg(48);" onmouseout="viewTm(48,0);" onmouseover="viewTm(48,1);" >&nbsp;</td>
+								</tr>
+								<tr id='timeLabel'>
+									<td class="tm-label">00</td><td class="tm-label">01</td><td class="tm-label">02</td><td class="tm-label">03</td><td class="tm-label">04</td>
+									<td class="tm-label">05</td><td class="tm-label">06</td><td class="tm-label">07</td><td class="tm-label">08</td><td class="tm-label">09</td>
+									<td class="tm-label">10</td><td class="tm-label">11</td><td class="tm-label">12</td><td class="tm-label">13</td><td class="tm-label">14</td>
+									<td class="tm-label">15</td><td class="tm-label">16</td><td class="tm-label">17</td><td class="tm-label">18</td><td class="tm-label">19</td>
+									<td class="tm-label">20</td><td class="tm-label">21</td><td class="tm-label">22</td><td class="tm-label">23</td><td class="tm-label">24</td>
+									<td class="tm-label">25</td><td class="tm-label">26</td><td class="tm-label">27</td><td class="tm-label">28</td><td class="tm-label">29</td>
+									<td class="tm-label">30</td><td class="tm-label">31</td><td class="tm-label">32</td><td class="tm-label">33</td><td class="tm-label">34</td>
+									<td class="tm-label">35</td><td class="tm-label">36</td><td class="tm-label">37</td><td class="tm-label">38</td><td class="tm-label">39</td>
+									<td class="tm-label">40</td><td class="tm-label">41</td><td class="tm-label">42</td><td class="tm-label">43</td><td class="tm-label">44</td>
+									<td class="tm-label">45</td><td class="tm-label">46</td><td class="tm-label">47</td><td class="tm-label">48</td>
+								</tr>
+							</table>
+						</div>
+
+						<div id="imageBox1" class="map-thumb" style="display: block;">
+							<img id="default" src="common/img/thumb/dnsc.png" alt="예측영역 이미지" onclick="javascript:imgPopup(this);">
+							<div class="map-thumb_alpha">
+								<img src="common/img/thumb/Capital_alpha.png" alt="수도권 AWS 위치">
+							</div>
+						</div>
+
+						<div id="imageBox2" class="map-thumb" style="display: block;">
+							<img id="default" src="common/img/thumb/seoul.png" alt="예측영역(서울) 이미지" onclick="javascript:imgPopup(this);">
+							<div class="map-thumb_alpha">
+								<img src="common/img/thumb/Seoul_alpha.png" alt="서울 AWS 위치">
+							</div>
+						</div>
+
+						<div id="imageList1" class="map-thumb" style="display: none;"></div>
+						<div id="imageList2" class="map-thumb" style="display: none;"></div>
+
+						<div style="margin-top: 10px;padding-bottom: 5px; border-bottom: 2px solid #e6e6e6;"></div>
+
+						<!--
+						<div id="capital" style="overflow-y: hidden;overflow-x: scroll;">
+						    <h1>시범영역</h1>
+							<table class="data-table">
+									<thead>
+										<tr>
+											<td>stn</td>
+											<td>name</td>
+											<td>00</td><td>01</td><td>02</td><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td><td>08</td><td>09</td>
+											<td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td>
+											<td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td>
+											<td>30</td><td>31</td><td>32</td><td>33</td><td>34</td><td>35</td><td>36</td><td>37</td><td>38</td><td>39</td>
+											<td>40</td><td>41</td><td>42</td><td>43</td><td>44</td><td>45</td><td>46</td><td>47</td><td>48</td>
+										</tr>
+									</thead>
+									<tbody id="capitalDataTable"></tbody>
+								</table>
+						</div>
+						<div id="seoul" style="margin-top: 10px;overflow-y: hidden;overflow-x: scroll;">
+							<h1>시범영역(서울)</h1>
+							<table class="data-table" style="border: 1px;">
+									<thead>
+										<tr>
+											<td>stn</td>
+											<td>name</td>
+											<td>00</td><td>01</td><td>02</td><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td><td>08</td><td>09</td>
+											<td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td>
+											<td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td>
+											<td>30</td><td>31</td><td>32</td><td>33</td><td>34</td><td>35</td><td>36</td><td>37</td><td>38</td><td>39</td>
+											<td>40</td><td>41</td><td>42</td><td>43</td><td>44</td><td>45</td><td>46</td><td>47</td><td>48</td>
+										</tr>
+									</thead>
+									<tbody id="seoulDataTable"></tbody>
+								</table>
+						</div>
+						-->
+					</div>
+				</div>
+			</div>
+			<!-- //content -->
+
+			<!-- footer -->
+			<div id="footer" class="footer">
+				<div>우. 63568 제주특별자치도 서귀포시 서호북로 33</div><div>|</div><div>COPYRIGHT ⓒ 2017 NATIONAL INSTITUTE OF METEOROLOGICAL SCIENCES. ALL RIGHTS RESERVED.</div>
+			</div>
+			<!-- //footer -->
+
+		</div>
+
+	</div>
+	<!-- //wrap -->
+
+	<map id="capitalMap" name="capitalMap">
+		<area shape="rect" coords="405,28,419,38" href="javascript:getJsonData('Capital', 504);" alt="504">
+		<area shape="rect" coords="320,49,331,61" href="javascript:getJsonData('Capital', 598);" alt="598">
+		<area shape="rect" coords="401,89,412,100" href="javascript:getJsonData('Capital', 599);" alt="599">
+		<area shape="rect" coords="357,104,370,117" href="javascript:getJsonData('Capital', 532);" alt="532">
+		<area shape="rect" coords="223,99,234,109" href="javascript:getJsonData('Capital', 506);" alt="506">
+		<area shape="rect" coords="229,124,240,136" href="javascript:getJsonData('Capital', 589);" alt="589">
+		<area shape="rect" coords="175,158,186,169" href="javascript:getJsonData('Capital', 427);" alt="427">
+		<area shape="rect" coords="392,161,405,173" href="javascript:getJsonData('Capital', 541);" alt="541">
+		<area shape="rect" coords="338,145,349,155" href="javascript:getJsonData('Capital', 406);" alt="406">
+		<area shape="rect" coords="338,161,348,170" href="javascript:getJsonData('Capital', 424);" alt="424">
+		<area shape="rect" coords="368,170,378,180" href="javascript:getJsonData('Capital', 407);" alt="407">
+		<area shape="rect" coords="300,156,309,167" href="javascript:getJsonData('Capital', 416);" alt="416">
+		<area shape="rect" coords="277,162,287,173" href="javascript:getJsonData('Capital', 540);" alt="540">
+		<area shape="rect" coords="325,175,334,186" href="javascript:getJsonData('Capital', 414);" alt="414">
+		<area shape="rect" coords="248,198,260,209" href="javascript:getJsonData('Capital', 404);" alt="404">
+		<area shape="rect" coords="232,207,242,219" href="javascript:getJsonData('Capital', 110);" alt="110">
+		<area shape="rect" coords="218,240,229,250" href="javascript:getJsonData('Capital', 429);" alt="429">
+		<area shape="rect" coords="246,244,258,253" href="javascript:getJsonData('Capital', 423);" alt="423">
+		<area shape="rect" coords="354,190,363,203" href="javascript:getJsonData('Capital', 408);" alt="408">
+		<area shape="rect" coords="367,192,375,202" href="javascript:getJsonData('Capital', 409);" alt="409">
+		<area shape="rect" coords="398,192,408,204" href="javascript:getJsonData('Capital', 569);" alt="569">
+		<area shape="rect" coords="392,206,401,215" href="javascript:getJsonData('Capital', 402);" alt="402">
+		<area shape="rect" coords="422,206,434,220" href="javascript:getJsonData('Capital', 428);" alt="428">
+		<area shape="rect" coords="364,218,376,231" href="javascript:getJsonData('Capital', 413);" alt="413">
+		<area shape="rect" coords="311,198,320,210" href="javascript:getJsonData('Capital', 108);" alt="108">
+		<area shape="rect" coords="299,199,308,210" href="javascript:getJsonData('Capital', 412);" alt="412">
+		<area shape="rect" coords="343,211,353,225" href="javascript:getJsonData('Capital', 421);" alt="421">
+		<area shape="rect" coords="321,212,332,220" href="javascript:getJsonData('Capital', 419);" alt="419">
+		<area shape="rect" coords="294,213,304,221" href="javascript:getJsonData('Capital', 411);" alt="411">
+		<area shape="rect" coords="271,221,280,236" href="javascript:getJsonData('Capital', 405);" alt="405">
+		<area shape="rect" coords="285,223,294,237" href="javascript:getJsonData('Capital', 510);" alt="510">
+		<area shape="rect" coords="299,225,308,236" href="javascript:getJsonData('Capital', 418);" alt="418">
+		<area shape="rect" coords="316,227,326,241" href="javascript:getJsonData('Capital', 415);" alt="415">
+		<area shape="rect" coords="373,233,384,242" href="javascript:getJsonData('Capital', 403);" alt="403">
+		<area shape="rect" coords="340,247,348,260" href="javascript:getJsonData('Capital', 401);" alt="401">
+		<area shape="rect" coords="287,244,301,254" href="javascript:getJsonData('Capital', 410);" alt="410">
+		<area shape="rect" coords="266,252,273,263" href="javascript:getJsonData('Capital', 895);" alt="895">
+		<area shape="rect" coords="281,260,292,270" href="javascript:getJsonData('Capital', 417);" alt="417">
+		<area shape="rect" coords="317,260,328,270" href="javascript:getJsonData('Capital', 425);" alt="425">
+		<area shape="rect" coords="303,265,312,277" href="javascript:getJsonData('Capital', 509);" alt="509">
+		<area shape="rect" coords="329,276,340,285" href="javascript:getJsonData('Capital', 590);" alt="590">
+		<area shape="rect" coords="312,271,319,281" href="javascript:getJsonData('Capital', 116);" alt="116">
+		<area shape="rect" coords="385,284,394,297" href="javascript:getJsonData('Capital', 572);" alt="572">
+		<area shape="rect" coords="447,274,456,286" href="javascript:getJsonData('Capital', 546);" alt="546">
+		<area shape="rect" coords="308,299,318,311" href="javascript:getJsonData('Capital', 894);" alt="894">
+		<area shape="rect" coords="298,319,308,330" href="javascript:getJsonData('Capital', 896);" alt="896">
+		<area shape="rect" coords="313,328,324,339" href="javascript:getJsonData('Capital', 897);" alt="897">
+		<area shape="rect" coords="254,364,266,377" href="javascript:getJsonData('Capital', 545);" alt="545">
+		<area shape="rect" coords="320,377,330,388" href="javascript:getJsonData('Capital', 119);" alt="119">
+		<area shape="rect" coords="429,368,441,381" href="javascript:getJsonData('Capital', 549);" alt="549">
+		<area shape="rect" coords="350,416,361,428" href="javascript:getJsonData('Capital', 550);" alt="550">
+		<area shape="rect" coords="245,414,257,425" href="javascript:getJsonData('Capital', 571);" alt="571">
+		<area shape="rect" coords="415,462,427,475" href="javascript:getJsonData('Capital', 575);" alt="575">
+		<area shape="rect" coords="364,242,372,251" href="javascript:getJsonData('Capital', 400);" alt="400">
+		<area shape="rect" coords="316,241,327,249" href="javascript:getJsonData('Capital', 889);" alt="889">
+	</map>
+
+	<map id="seoulMap" name="seoulMap">
+		<area shape="rect" coords="302,109,312,120" href="javascript:getJsonData('Seoul', 406);" alt="406">
+		<area shape="rect" coords="211,137,221,149" href="javascript:getJsonData('Seoul', 416);" alt="416">
+		<area shape="rect" coords="298,144,310,155" href="javascript:getJsonData('Seoul', 424);" alt="424">
+		<area shape="rect" coords="269,181,282,193" href="javascript:getJsonData('Seoul', 414);" alt="414">
+		<area shape="rect" coords="368,165,380,178" href="javascript:getJsonData('Seoul', 407);" alt="407">
+		<area shape="rect" coords="335,215,347,227" href="javascript:getJsonData('Seoul', 408);" alt="408">
+		<area shape="rect" coords="362,214,375,225" href="javascript:getJsonData('Seoul', 409);" alt="409">
+		<area shape="rect" coords="207,235,221,249" href="javascript:getJsonData('Seoul', 412);" alt="412">
+		<area shape="rect" coords="235,234,246,245" href="javascript:getJsonData('Seoul', 108);" alt="108">
+		<area shape="rect" coords="90,233,100,244" href="javascript:getJsonData('Seoul', 404);" alt="404">
+		<area shape="rect" coords="52,251,66,265" href="javascript:getJsonData('Seoul', 110);" alt="110">
+		<area shape="rect" coords="195,262,208,272" href="javascript:getJsonData('Seoul', 411);" alt="411">
+		<area shape="rect" coords="141,289,155,302" href="javascript:getJsonData('Seoul', 405);" alt="405">
+		<area shape="rect" coords="173,292,185,306" href="javascript:getJsonData('Seoul', 510);" alt="510">
+		<area shape="rect" coords="206,295,220,308" href="javascript:getJsonData('Seoul', 418);" alt="418">
+		<area shape="rect" coords="257,257,271,272" href="javascript:getJsonData('Seoul', 419);" alt="419">
+		<area shape="rect" coords="313,263,324,277" href="javascript:getJsonData('Seoul', 421);" alt="421">
+		<area shape="rect" coords="426,253,436,264" href="javascript:getJsonData('Seoul', 402);" alt="402">
+		<area shape="rect" coords="362,280,374,295" href="javascript:getJsonData('Seoul', 413);" alt="413">
+		<area shape="rect" coords="246,300,257,314" href="javascript:getJsonData('Seoul', 415);" alt="415">
+		<area shape="rect" coords="184,335,198,349" href="javascript:getJsonData('Seoul', 410);" alt="410">
+		<area shape="rect" coords="248,326,259,338" href="javascript:getJsonData('Seoul', 889);" alt="889">
+		<area shape="rect" coords="87,338,99,348" href="javascript:getJsonData('Seoul', 423);" alt="423">
+		<area shape="rect" coords="166,374,177,384" href="javascript:getJsonData('Seoul', 417);" alt="417">
+		<area shape="rect" coords="219,389,232,401" href="javascript:getJsonData('Seoul', 509);" alt="509">
+		<area shape="rect" coords="253,375,266,387" href="javascript:getJsonData('Seoul', 425);" alt="425">
+		<area shape="rect" coords="301,345,311,361" href="javascript:getJsonData('Seoul', 401);" alt="401">
+		<area shape="rect" coords="359,327,371,340" href="javascript:getJsonData('Seoul', 400);" alt="400">
+		<area shape="rect" coords="375,310,388,323" href="javascript:getJsonData('Seoul', 403);" alt="403">
+	</map>
+
+	<div id="popupLabel" style="padding:5px; position: fixed; color:#fff; background-color:#2f7dcc;"></div>
+
+	<!-- Log Modal -->
+	<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="section">
+					<div class="tit-wrap">
+						<h2>예측자료 생산 진행상황</h2>
+						<button type="button" class="modal-close" data-dismiss="modal"><img src="common/img/ico/btn-gnb-close.svg" alt=""></button>
+					</div>
+					<div class="modal-body-scroll">
+						<ul class="log-list">
+							<li id="load">
+								<strong>필수자료 로딩중...</strong>
+								<div class="img img-loading"><span class="blind">진행중</span></div>
+							</li>
+							<li id="format">
+								<strong>필요변수 생성중...</strong>
+								<div class="img img-loading"><span class="blind">진행중</span></div>
+							</li>
+							<li id="vismaster">
+								<strong>변수 보정중...</strong>
+								<div class="img img-loading"><span class="blind">진행중</span></div>
+							</li>
+							<li id="img2">
+								<strong>예측자료(서울) 이미지 생산중...</strong>
+								<div class="img img-loading"><span class="blind">진행중 (0/0)</span></div>
+							</li>
+							<li id="img1">
+								<strong>예측자료 이미지 생산중...</strong>
+								<div class="img img-loading"><span class="blind">진행중 (0/0)</span></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 시계열 팝업 -->
+	<div class="loc_pop_wrap_nc" id="loc_pop_wrap_nc" style="display: none;">
+		<h5 id="stitle" class="blind">시계열 팝업</h5>
+		<div class="loc_pop_nc" id="loc_pop_nc">
+			<div class="loc_pop_top_nc" id="graphdiv">
+				<span id="ncgraph_title"> AWS 명칭</span>
+				<a href="#;" class="pop_close_nc" id="pop_close_nc" onclick="close_ncGraph('loc_pop_wrap_nc');">닫음</a>
+			</div>
+
+			<div class="loc_pop_inner_nc">
+				<span id="ncgraph_title2" style="float:right; display:inline-block;font-size:13px; color:#666;"></span>
+				<div class="graph_nc" id="ncgraph" style="width:100%; height:300px;" tabindex="0"></div>
+				<div class="tbl_wrap" style="display:none;" id="ncdiv">
+					<table class="table03" id="nctable" tabindex="0">
+						<thead></thead>
+						<tbody><tr><th scope="col"></th></tr></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>
+	var _imgURL = '';
+	var _timestemp = '';
+	var _logCount = 0;
+	var _load = 0;
+	var _anal = 0;
+
+	var _totCount1 = 0;
+	var _totCount2 = 0;
+	var _imgCount1 = 0;
+	var _imgCount2 = 0;
+	var _arrImage1 = new Array();
+	var _arrImage2 = new Array();
+
+	var _timer;
+	var _logInfo = new Array();
+
+	function setData(tm, tm_summary, data1, data2, data2_wd, table_html, add_html1, add_html2) {
+		var unit = '';
+        var name = '';
+        var sercolor = '';
+		var graphType = '';
+
+		for(var i = 0; i < data1.length; i++ ) {
+			data1[i] = parseFloat(data1[i]);
+		}
+
+		$('#loc_pop_wrap_nc').show();
+		// 화면 크기에 따른 팝업 크기 및 위치 CSS 설정
+		document.getElementById('loc_pop_wrap_nc').style.height = document.body.scrollHeight + 'px';
+		document.querySelector('#loc_pop_wrap_nc .loc_pop_nc').style.top = (document.documentElement.scrollTop + 150) + 'px';
+
+		//분석 항목에 따라 chart 변경 필요
+		switch($('#predItem').val()) {
+			case 'temperature': //기온
+				unit = "℃";
+				name = "기온";
+				sercolor = "#FF0000";
+				graphType = "column";
+				$("#ncgraph").css('display','');
+				$('#ncdiv').css('display','');
+				$('#nctable >thead>tr').remove();
+				$('#nctable >tbody>tr').remove();
+
+				$('#nctable >thead').append(table_html);
+				$('#nctable >tbody').append(add_html1 + "" + add_html2);
+
+				$('#ncgraph').highcharts({
+					chart: {
+						//zoomType: 'x',
+						type: graphType
+					},
+					title: {
+						text: '',
+						style:{"color":"#63686d", "fontSize":"16px"}
+					},
+					exporting: {
+						enabled: false
+					},
+					subtitle: {
+						text: document.ontouchstart === undefined ? '' : ''
+					},
+					xAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"11px"},
+							formatter: function () {
+								return tm_summary[this.value];//Highcharts.dateFormat('%m월 %d일 %H시', this.value);
+							},
+							rotation:0,
+							overflow:'allow'
+						},
+						title:{
+							text:'시간(UTC)',
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						tickInterval: 6
+					},
+					yAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						title: {
+							text: name + "(" + unit + ")",
+							style:{"color":"#63686d","fontSize":"12px"}
+						}
+					},
+					tooltip:{
+						shared : true,
+						useHTML : true,
+						formatter : function(){
+							var s = "<b>"+tm[this.x]+"</b><br/>";
+							$.each(this.points, function(){
+								s += "<b style=\"color: "+this.series.color+"\">●</b> "+this.series.name+" : ";
+								s += "<b>"+(this.y).toFixed(1)+" " + unit + "</b><br/>";
+							});
+							return s;
+						}
+					},
+					legend: {
+						itemStyle:{"color":"#63686d"}
+					},
+					plotOptions: {
+						series:{
+							lineWidth: 2,
+							dataLabels: {
+								allowOverlap:true,
+								enabled: false,
+								style: {
+									"fontSize":"12px",
+									textShadow:"1px 1px 1px #000"
+							}
+							}
+						}
+					},
+					credits:{enabled:false},
+					series: [{
+						name: name,
+						data: data1,
+						color:sercolor
+					}]
+				});
+			break;
+
+			case 'relhumidity': //습도
+				unit = "%";
+				name = "습도";
+				sercolor = "#FF0000";
+				graphType = "column";
+				$("#ncgraph").css('display','');
+				$('#ncdiv').css('display','');
+				$('#nctable >thead>tr').remove();
+				$('#nctable >tbody>tr').remove();
+
+				$('#nctable >thead').append(table_html);
+				$('#nctable >tbody').append(add_html1 + "" + add_html2);
+
+				$('#ncgraph').highcharts({
+					chart: {
+						//zoomType: 'x',
+						type: graphType
+					},
+					title: {
+						text: '',
+						style:{"color":"#63686d", "fontSize":"16px"}
+					},
+					exporting: {
+						enabled: false
+					},
+					subtitle: {
+						text: document.ontouchstart === undefined ? '' : ''
+					},
+					xAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"11px"},
+							formatter: function () {
+								return tm_summary[this.value];//Highcharts.dateFormat('%m월 %d일 %H시', this.value);
+							},
+							rotation:0,
+							overflow:'allow'
+						},
+						title:{
+							text:'시간(UTC)',
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						tickInterval: 6
+					},
+					yAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						title: {
+							text: name + "(" + unit + ")",
+							style:{"color":"#63686d","fontSize":"12px"}
+						}
+					},
+					tooltip:{
+						shared : true,
+						useHTML : true,
+						formatter : function(){
+							var s = "<b>"+tm[this.x]+"</b><br/>";
+							$.each(this.points, function(){
+								s += "<b style=\"color: "+this.series.color+"\">●</b> "+this.series.name+" : ";
+								s += "<b>"+(this.y).toFixed(1)+" " + unit + "</b><br/>";
+							});
+							return s;
+						}
+					},
+					legend: {
+						itemStyle:{"color":"#63686d"}
+					},
+					plotOptions: {
+						series:{
+							lineWidth: 2,
+							dataLabels: {
+								allowOverlap:true,
+								enabled: false,
+								style: {
+									"fontSize":"12px",
+									textShadow:"1px 1px 1px #000"
+							}
+							}
+						}
+					},
+					credits:{enabled:false},
+					series: [{
+						name: name,
+						data: data1,
+						color:sercolor
+					}]
+				});
+			break;
+
+			case 'visibility': //시정
+				unit = "km";
+				name = "시정";
+				sercolor = "#FF0000";
+				graphType = "column";
+				$("#ncgraph").css('display','');
+				$('#ncdiv').css('display','');
+				$('#nctable >thead>tr').remove();
+				$('#nctable >tbody>tr').remove();
+
+				$('#nctable >thead').append(table_html);
+				$('#nctable >tbody').append(add_html1 + "" + add_html2);
+
+				$('#ncgraph').highcharts({
+					chart: {
+						//zoomType: 'x',
+						type: graphType
+					},
+					title: {
+						text: '',
+						style:{"color":"#63686d", "fontSize":"16px"}
+					},
+					exporting: {
+						enabled: false
+					},
+					subtitle: {
+						text: document.ontouchstart === undefined ? '' : ''
+					},
+					xAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"11px"},
+							formatter: function () {
+								return tm_summary[this.value];//Highcharts.dateFormat('%m월 %d일 %H시', this.value);
+							},
+							rotation:0,
+							overflow:'allow'
+						},
+						title:{
+							text:'시간(UTC)',
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						tickInterval: 6
+					},
+					yAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						title: {
+							text: name + "(" + unit + ")",
+							style:{"color":"#63686d","fontSize":"12px"}
+						}
+					},
+					tooltip:{
+						shared : true,
+						useHTML : true,
+						formatter : function(){
+							var s = "<b>"+tm[this.x]+"</b><br/>";
+							$.each(this.points, function(){
+								s += "<b style=\"color: "+this.series.color+"\">●</b> "+this.series.name+" : ";
+								s += "<b>"+(this.y).toFixed(1)+" " + unit + "</b><br/>";
+							});
+							return s;
+						}
+					},
+					legend: {
+						itemStyle:{"color":"#63686d"}
+					},
+					plotOptions: {
+						series:{
+							lineWidth: 2,
+							dataLabels: {
+								allowOverlap:true,
+								enabled: false,
+								style: {
+									"fontSize":"12px",
+									textShadow:"1px 1px 1px #000"
+							}
+							}
+						}
+					},
+					credits:{enabled:false},
+					series: [{
+						name: name,
+						data: data1,
+						color:sercolor
+					}]
+				});
+			break;
+
+			case 'wind': //바람
+				unit = "m/s";
+				name = "풍속";
+				sercolor = "#0000FF";
+				graphType = "line";
+				$("#ncgraph").css('display','');
+				$('#ncdiv').css('display','block');
+				$("#nctable").removeClass("plane_tbl");
+				$('#nctable >thead>tr').remove();
+				$('#nctable >tbody>tr').remove();
+
+				$('#nctable >thead').append(table_html);
+				$('#nctable >tbody').append(add_html1 + "" + add_html2);
+				$('#ncgraph').highcharts({
+					chart: {
+						//zoomType: 'x',
+						type: graphType
+					},
+					title: {
+						text: '',
+						style:{"color":"#63686d", "fontSize":"16px"}
+					},
+					exporting: {
+						enabled: false
+					},
+					subtitle: {
+						text: document.ontouchstart === undefined ? '' : ''
+					},
+					xAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"11px"},
+							formatter: function () {
+								return tm_summary[this.value];
+							},
+							rotation:0,
+							overflow:'allow'
+						},
+						title:{
+							text:'시간(KST)',
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						offset:15,
+						tickInterval: 6
+					},
+					yAxis: [{
+						labels: {
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						title: {
+							text: name + "(" + unit + ")",
+							style:{"color":"#63686d","fontSize":"12px"}
+						}
+					},{
+						min:0,
+						max:10,
+						labels:{enabled:false},
+						title:{enabled:false},
+						opposite: true
+					}],
+					tooltip:{
+						shared : true,
+						useHTML : true,
+						formatter : function(){
+							var s = "<b>"+tm[this.x]+"</b><br/>";
+							$.each(this.points, function(){
+								if(this.series.name=='풍향'){
+									s += "<b style=\"color: "+this.series.color+"\">●</b> "+this.series.name+" : ";
+									s += "<b>"+data2_wd[this.series.data.indexOf( this.point )]+"</b><br/>";
+								}else{
+									s += "<b style=\"color: "+this.series.color+"\">●</b> "+this.series.name+" : ";
+									s += "<b>"+(this.y).toFixed(1)+" " + unit + "</b><br/>";
+								}
+
+							});
+							return s;
+						}
+					},
+					legend: {
+						itemStyle:{"color":"#63686d"}
+					},
+					plotOptions: {
+						line:{
+							lineWidth: 2,
+							dataLabels: {
+								allowOverlap:true,
+								enabled: false,
+								style: {
+									"fontSize":"12px",
+									textShadow:"1px 1px 1px #000"
+							}
+							}
+						}
+					},
+					credits:{enabled:false},
+					series: [{
+						name: name,
+						data: data1,
+						color:sercolor,
+						marker: {enabled: true}
+					},{name:'풍향',
+						data:data2,
+						yAxis: 1,
+						color:'#23EAFD',
+						lineWidth: 0,
+						marker: {enabled: true}
+					}]
+				});
+			break;
+
+			case 'downward_SW_flux': //태양광
+				unit = "W/㎡";
+				name = "태양광";
+				sercolor = "#FF0000";
+				graphType = "column";
+				$("#ncgraph").css('display','');
+				$('#ncdiv').css('display','');
+				$('#nctable >thead>tr').remove();
+				$('#nctable >tbody>tr').remove();
+
+				$('#nctable >thead').append(table_html);
+				$('#nctable >tbody').append(add_html1 + "" + add_html2);
+
+				$('#ncgraph').highcharts({
+					chart: {
+						//zoomType: 'x',
+						type: graphType
+					},
+					title: {
+						text: '',
+						style:{"color":"#63686d", "fontSize":"16px"}
+					},
+					exporting: {
+						enabled: false
+					},
+					subtitle: {
+						text: document.ontouchstart === undefined ? '' : ''
+					},
+					xAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"11px"},
+							formatter: function () {
+								return tm_summary[this.value];//Highcharts.dateFormat('%m월 %d일 %H시', this.value);
+							},
+							rotation:0,
+							overflow:'allow'
+						},
+						title:{
+							text:'시간(KST)',
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						tickInterval: 6
+					},
+					yAxis: {
+						labels: {
+							style:{"color":"#63686d","fontSize":"12px"}
+						},
+						title: {
+							text: name + "(" + unit + ")",
+							style:{"color":"#63686d","fontSize":"12px"}
+						}
+					},
+					tooltip:{
+						shared : true,
+						useHTML : true,
+						formatter : function(){
+							var s = "<b>"+tm[this.x]+"</b><br/>";
+							$.each(this.points, function(){
+								s += "<b style=\"color: "+this.series.color+"\">●</b> "+this.series.name+" : ";
+								s += "<b>"+(this.y).toFixed(1)+" " + unit + "</b><br/>";
+							});
+							return s;
+						}
+					},
+					legend: {
+						itemStyle:{"color":"#63686d"}
+					},
+					plotOptions: {
+						series:{
+							lineWidth: 2,
+							dataLabels: {
+								allowOverlap:true,
+								enabled: false,
+								style: {
+									"fontSize":"12px",
+									textShadow:"1px 1px 1px #000"
+							}
+							}
+						}
+					},
+					credits:{enabled:false},
+					series: [{
+						name: name,
+						data: data1,
+						color:sercolor
+					}]
+				});
+			break;
+		}
+	}
+
+	function setImage() {
+		$('#imageList1').empty();
+		$('#imageList2').empty();
+
+		$('#imageList1').append('<div class="checkzone" style="z-index:99;"><label class="container"><input type="checkbox" id="chkCapital" checked><span class="checkmark"></span></label><span class="txt_check">AWS 지점 표시</span></div>');
+		$('#imageList2').append('<div class="checkzone_two" style="z-index:99;"><label class="container"><input type="checkbox" id="chkSeoul" checked><span class="checkmark"></span></label><span class="txt_check">AWS 지점 표시</span></div>');
+		setEvent();
+
+		_arrImage1.sort();
+		_arrImage2.sort();
+
+		for(var i = 0; i < _arrImage1.length; i++) { //_arrImage1, _arrImage2 길이 같음
+			$('#imageList1').append('<div class="map-thumb img-dnsc" style="display: none;"><img src="' + _arrImage1[i] + '" onclick="javascript:imgPopup(this);"></div>');
+			$('#imageList2').append('<div class="map-thumb img-dnsc" style="display: none;"><img src="' + _arrImage2[i] + '" onclick="javascript:imgPopup(this);"></div>');
+		}
+
+		$('#imageList1').append('<div id="alphaCapital" class="map-thumb_alpha"><img src="common/img/thumb/Capital_alpha.png" alt="수도권 AWS 위치" usemap="#capitalMap"></div>');
+		$('#imageList2').append('<div id="alphaSeoul" class="map-thumb_alpha"><img src="common/img/thumb/Seoul_alpha.png" alt="서울 AWS 위치" usemap="#seoulMap"></div>');
+
+		$('#baseDate').text($('#predDate').val() + ' ' + $('#predTime').val());
+		$('#imageBox1').css('display', 'none');
+		$('#imageBox2').css('display', 'none');
+		$('#imageList1').css('display', 'block');
+		$('#imageList2').css('display', 'block');
+
+		moving(0);
+	}
+
+	function stopLogInfo() {
+		clearInterval(_timer);
+	}
+
+	var flagImgLog = true;
+	function getImgLogInfo() {
+		//변수 초기화
+		_logCount = 0;
+
+		_totCount1 = 0;
+	    _totCount2 = 0;
+	    _imgCount1 = 0;
+	    _imgCount2 = 0;
+		_arrImage1 = new Array();
+		_arrImage2 = new Array();
+
+		_proc1 = false;
+		_proc2 = false;
+
+		_timer = null;
+		_logInfo = new Array();
+
+		_timer = setInterval(function() {
+			if(flagImgLog) { flagImgLog = false; }
+			else { return; }
+
+			var param = 'sno=' + _timestemp;
+			$.getJSON('apps/predImgLogProcess.php', param, function(result) {
+				$.ajaxSetup({cache:false});
+
+				if(result.resultCode == '9999') { //check error
+					alert(result.resultMsg);
+					stopLogInfo();
+					$('#logModal').modal('hide');
+					flagImgLog = true;
+					return;
+				}
+
+				var logData = result.resultMsg;
+				var info = null;
+
+				if(logData.length == 0) { //check log contents
+					flagImgLog = true;
+					return;
+				}
+
+				var offset = 0;
+				if(_logCount != 0) { //이전 길이가 있는가?
+					if(_logCount == logData.length) { //이전 길이와 같은가?
+						flagImgLog = true;
+						return;
+
+					} else { //이전 길이와 다르다면?
+						offset = _logCount;
+						_logCount = logData.length;
+					}
+
+				} else {
+					_logCount = logData.length;
+				}
+
+				//console.log('offset:' + offset + ' _logCount:' + _logCount + ' logData.length:' + logData.length);
+
+				for(var i = offset; i < logData.length; i++) {
+					info = logData[i].split('|');
+
+					switch(info[0]) { //추가정보 표출 필요시 로직변경 필요
+						case 'TOT_1': //생산될 예측파일 개수 확인
+							_totCount1 = parseInt(info[1]);
+							$('#img1').children().eq(0).text('예측자료 이미지 생산중 (0/' + _totCount1 + ')');
+							break;
+
+						case 'TOT_2': //생산될 서울영역 예측파일 개수 확인
+							_totCount2 = parseInt(info[1]);
+							$('#img2').children().eq(0).text('예측자료(서울) 이미지 생산중 (0/' + _totCount2 + ')');
+							break;
+
+						//IMG|/s4/home/nimr/ukpp/public_html/images/20201029/1603966080/temperature_surface_20200501-20200531.png
+						case 'IMG_1': //예측자료 이미지 생산
+							_imgCount1 += 1;
+							var imgFilename = '';
+							if(_totCount1 != _imgCount1) {
+								$('#img1').children().eq(0).text('예측자료 이미지 생산중 (' + _imgCount1 + '/' + _totCount1 + ')');
+
+								imgFilename = info[1].split('/');
+								_arrImage1.push(_imgURL + imgFilename[imgFilename.length - 1]);
+
+								break;
+							}
+
+							//마지막 자료 입력
+							imgFilename = info[1].split('/');
+							_arrImage1.push(_imgURL + imgFilename[imgFilename.length - 1]);
+
+							$('#img1').children().eq(0).text('예측자료 이미지 생산 완료!!');
+							$('#img1').children().eq(1).attr('class', 'img img-complete');
+							break;
+
+						case 'IMG_2': //서울영역 예측자료 이미지 생산
+						    _imgCount2 += 1;
+							var imgFilename = '';
+							if(_totCount2 != _imgCount2) {
+								$('#img2').children().eq(0).text('예측자료(서울) 이미지 생산중 (' + _imgCount2 + '/' + _totCount2 + ')');
+
+								imgFilename = info[1].split('/');
+								_arrImage2.push(_imgURL + imgFilename[imgFilename.length - 1]);
+
+								break;
+							}
+
+							//마지막 자료 입력
+							imgFilename = info[1].split('/');
+							_arrImage2.push(_imgURL + imgFilename[imgFilename.length - 1]);
+
+							$('#img2').children().eq(0).text('예측자료(서울) 이미지 생산 완료!!');
+							$('#img2').children().eq(1).attr('class', 'img img-complete');
+							break;
+
+						case 'PROC_1': //예측영역 이미지 생산 완료
+							if('done' == info[1]) {
+								_proc1 = true;
+							}
+							break;
+
+						case 'PROC_2': //예측영역(서울) 이미지 생산 완료
+							if('done' == info[1]) {
+								_proc2 = true;
+							}
+							break;
+
+						case 'ERR': //로그 오류메시지
+							alert(info[1]);
+							stopLogInfo();
+							$('#logModal').modal('hide');
+							break;
+					}
+				}
+
+				if(_proc1 && _proc2) {
+					stopLogInfo();
+					setImage();
+					$('#logModal').modal('hide');
+				}
+
+				flagImgLog = true;
+			});
+		}, 1000);
+	}
+
+	//예측자료 이미지 생성 시작
+	function runImgProcess() {
+		var param = 'sno=' + _timestemp;
+		$.getJSON('apps/predImgProcess.php', param, function(result) {
+			$.ajaxSetup({cache:false});
+
+			if(result.resultCode == '9999') { //check error
+				alert(result.resultMsg);
+				$('#logModal').modal('hide');
+				return;
+			}
+
+			console.log(result);
+			getImgLogInfo(); //예측자료 이미지 생성 로그 조회
+		});
+	}
+
+	var flag = true; //중복실행 방지
+	function getFileLogInfo() { //예측파일 생성 로그
+		//변수 초기화
+		_logCount = 0;
+		_timer = null;
+		_logInfo = new Array();
+
+		_timer = setInterval(function() {
+			if(flag) { flag = false; }
+			else { return; }
+
+			var param = 'sno=' + _timestemp;
+			$.getJSON('apps/predFileLogProcess.php', param, function(result) {
+				$.ajaxSetup({cache:false});
+
+				//로그 파일 생성이 늦을 수 있어 패스..
+				if(result.resultCode == '9999') {
+					//alert(result.resultMsg);
+					//stopLogInfo();
+					flag = true;
+					return;
+				}
+
+				var logData = result.resultMsg;
+				var info = null;
+
+				if(logData.length == 0) { //check log contents
+					flag = true;
+					return;
+				}
+
+				var offset = 0;
+				if(_logCount != 0) { //이전 길이가 있는가?
+					if(_logCount == logData.length) { //이전 길이와 같은가?
+						flag = true;
+						return;
+
+					} else { //이전 길이와 다르다면?
+						offset = _logCount;
+						_logCount = logData.length;
+					}
+
+				} else {
+					_logCount = logData.length;
+				}
+
+				console.log(result);
+				console.log('offset:' + offset + ' _logCount:' + _logCount + ' logData.length:' + logData.length);
+
+				for(var i = offset; i < logData.length; i++) {
+					info = logData[i].split('|');
+
+					switch(info[0]) { //추가정보 표출 필요시 로직변경 필요
+						case 'LOAD': //필요자료 로딩
+							if('START' == info[1]) break;
+							$('#load').children().eq(0).text('필수자료 로딩 완료!!');
+							$('#load').children().eq(1).attr('class', 'img img-complete');
+							break;
+
+						case 'FORMAT': //필요변수 생성
+							if('START' == info[1]) break;
+							$('#format').children().eq(0).text('필요변수 생성 완료!!');
+							$('#format').children().eq(1).attr('class', 'img img-complete');
+							break;
+
+						case 'VISMASTER': //기온변수 보정
+							if('START' == info[1]) break;
+							$('#vismaster').children().eq(0).text('변수 보정 완료!!');
+							$('#vismaster').children().eq(1).attr('class', 'img img-complete');
+							stopLogInfo();
+							runImgProcess(); //예측자료 이미지 생성 시작
+							break;
+
+						case 'ERR': //로그 오류메시지
+							alert(info[1]);
+							stopLogInfo();
+							$('#logModal').modal('hide');
+							break;
+					}
+				}
+
+				flag = true;
+			});
+		}, 1000);
+	}
+
+	function search() {
+		var vstep = $('#vstep').val();
+		var vmin = $('#vmin').val();
+		var vmax = $('#vmax').val();
+
+		if(!isEmpty(vstep) || !isEmpty(vmin) || !isEmpty(vmax)) {
+			if(isEmpty(vstep)) {
+				alert('[간격] 값이 없습니다.');
+				$('#vstep').focus();
+				return;
+			}
+
+			if(isEmpty(vmin)) {
+				alert('[최소] 값이 없습니다.');
+				$('#vmin').focus();
+				return;
+			}
+
+			if(isEmpty(vmax)) {
+				alert('[최대] 값이 없습니다.');
+				$('#vmax').focus();
+				return;
+			}
+		}
+
+		if(!isEmpty(vstep) && !isEmpty(vmin) && !isEmpty(vmax)) { //모든 값이 비어있는지 않다면
+			if(!$.isNumeric(vstep)) {
+				alert('[간격] 값이 숫자가 아닙니다.');
+				$('#vstep').focus();
+				return;
+			}
+
+			if(!$.isNumeric(vmin)) {
+				alert('[최소] 값이 숫자가 아닙니다.');
+				$('#vmin').focus();
+				return;
+			}
+
+			if(!$.isNumeric(vmax)) {
+				alert('[최대] 값이 숫자가 아닙니다.');
+				$('#vmax').focus();
+				return;
+			}
+
+			if(vmin >= vmax) {
+				alert('[최소] 값은 [최대] 값보다 작아야 합니다.');
+				$('#vmin').focus();
+				return;
+			}
+		}
+
+		var param = $('#frmPred').serialize() + '&' + $('#frmColor').serialize();
+		console.log(param);
+
+		startSpinner('__CONTENT_BODY__');
+		$.getJSON('apps/predFileProcess.php', param, function(result) {
+			$.ajaxSetup({cache:false});
+
+			//응답이 왔으면 spinner 종료
+			__SUBMIT_FLAG__ = true;
+			if(typeof __SPINNER__ != 'undefined') {
+				__SPINNER_PANEL__.remove();
+				__SPINNER__.stop();
+			}
+
+			console.log(result);
+			if(result.resultCode == '0000') {
+				_imgURL = result.resultMsg;
+				_timestemp = _imgURL.split('/')[2];
+
+				//초기화
+				_logCount = 0;
+				_load = 0;
+				_anal = 0;
+
+				_totCount1 = 0;
+				_totCount2 = 0;
+				_imgCount1 = 0;
+				_imgCount2 = 0;
+				_arrImage1 = new Array();
+				_arrImage2 = new Array();
+				_proc1 = false;
+		        _proc2 = false;
+
+				_timer;
+				_logInfo = new Array();
+
+				$('#load').children().eq(0).text('필수자료 로딩중...');
+				$('#load').children().eq(1).attr('class', 'img img-loading');
+				$('#format').children().eq(0).text('필요변수 생성중...');
+				$('#format').children().eq(1).attr('class', 'img img-loading');
+				$('#vismaster').children().eq(0).text('변수 보정중...');
+				$('#vismaster').children().eq(1).attr('class', 'img img-loading');
+				$('#img1').children().eq(0).text('예측자료 이미지 생산중');
+				$('#img1').children().eq(1).attr('class', 'img img-loading');
+				$('#img2').children().eq(0).text('예측자료(서울) 이미지 생산중');
+				$('#img2').children().eq(1).attr('class', 'img img-loading');
+
+				//로그모달 표출
+				$('#logModal').modal({backdrop: 'static', keyboard: false});
+				getFileLogInfo();
+
+			} else {
+				alert(result.resultCode);
+			}
+		});
+	}
+
+	$('#btnImgSearch').click(function(event) {
+		search();
+	});
+
+	$('#btnDraw').click(function(event) {
+		search();
+	});
+
+	// prev 버튼 클릭 & 이미지 변경 이벤트
+	$('.btn_controller_prev').on('click', function(e) {
+		moving(-1);
+	});
+
+	// next 버튼 클릭 & 이미지 변경 이벤트
+	$('.btn_controller_next').on('click', function(e) {
+		moving(1);
+	});
+
+	// play&stop 버튼 클릭 & 타이머 작동 이벤트
+	$('.slide-play-btn').on('click', function(e) {
+		if( $('.slide-play-btn').hasClass('active') ) {
+			$('.slide-play-btn').removeClass('active');
+			$('.slide-play-btn img').attr('src', 'common/img/ico/btn_controller_play2.gif');
+			clearInterval(imageTimer);
+
+		} else {
+			$('.slide-play-btn').addClass('active');
+			$('.slide-play-btn img').attr('src', 'common/img/ico/btn_controller_stop2.gif');
+
+			imageTimer = setInterval("playImage()", 500);
+		}
+	});
+
+	// image 재생용 setInterval 함수
+	function playImage() {
+		moving(1);
+	}
+
+	var _IMG_IDX_ = 0;
+	function viewTm(idx, mode) {
+		if(document.getElementById('imageList1').children.length == 0) {
+			return;
+		}
+
+		var viewMode = '';
+
+		if(mode == 1) {
+			viewMode = 'visible';
+			document.getElementById('timeLabel').children[idx].style.backgroundColor = "#aaffaa";
+		    document.getElementById('timeBar').children[idx].style.backgroundColor = "#aaffaa";
+
+		} else {
+			if(_IMG_IDX_ == idx) {
+				viewMode = 'visible';
+				document.getElementById('timeLabel').children[idx].style.backgroundColor = "#aaffaa";
+				document.getElementById('timeBar').children[idx].style.backgroundColor = "#aaffaa";
+
+			} else {
+				viewMode = 'hidden';
+				document.getElementById('timeLabel').children[idx].style.backgroundColor = "#ffffff";
+				document.getElementById('timeBar').children[idx].style.backgroundColor = "#bbbbbb";
+			}
+		}
+
+		//document.getElementById('timeLabel').children[idx].style.visibility = viewMode;
+	}
+
+	function viewImg(idx) {
+		if(document.getElementById('imageList1').children.length == 0) {
+			return;
+		}
+
+		//$('.tm-label').css('visibility', 'hidden');
+		$('.tm-bar').css('backgroundColor', '#bbbbbb');
+		$('.tm-label').css('backgroundColor', '#ffffff');
+		$('.img-dnsc').css('display', 'none');
+
+		document.getElementById('imageList1').children[idx + 1].style.display = 'block';
+		document.getElementById('imageList2').children[idx + 1].style.display = 'block';
+
+		_IMG_IDX_ = idx;
+		viewTm(idx, 1);
+	}
+
+	function moving(idx) {
+		if(document.getElementById('imageList1').children.length == 0) {
+			return;
+		}
+
+		//$('.tm-label').css('visibility', 'hidden');
+
+		_IMG_IDX_ = (_IMG_IDX_ + idx + 49 ) % 49
+		viewImg(_IMG_IDX_);
+	}
+
+	function doKey() {
+		if(event.keyCode == 37) { //왼쪽
+			moving(-1);
+
+		} else if(event.keyCode == 39) { //오른쪽
+			moving(1);
+		}
+	}
+
+	function doScroll() {
+		document.querySelector('#loc_pop_wrap_nc .loc_pop_nc').style.top = (document.documentElement.scrollTop + 150) + 'px';
+	}
+
+	$('#btnDataDown').click(function(event) { //예측영역, 예측영역(서울) 이미지 모두 다운로드 되어야 한다...
+		var imgSrc, tokens;
+
+		if(document.getElementById('imageList1').children.length == 0) {
+			imgSrc = document.getElementById('imageBox1').firstElementChild.getAttribute('src');
+			tokens = imgSrc.split('/');
+			saveToDisk(imgSrc, tokens[tokens.length - 1]);
+			return;
+		}
+
+		imgSrc = document.getElementById('imageList1').children[_IMG_IDX_].firstElementChild.getAttribute('src');
+		console.log(imgSrc);
+		tokens = imgSrc.split('/');
+		saveToDisk(imgSrc, tokens[tokens.length - 1]);
+	});
+
+	//예측자료 조회
+	function getJsonData(type, stnId) {
+		//console.log(type + ', ' + stnId);
+		//var url = 'http://192.168.0.72/~koast/database/' + type + '_' + $('#predItem').val() + '.json'; //test
+		var url = _imgURL + type + '_' + $('#predItem').val() + '.json';
+		//console.log(url);
+
+		var database; //AWS Database 설정
+		if('Capital' == type) {
+			database = capitalData;
+		} else {
+			database = seoulData;
+		}
+
+		//aws 명칭 설정
+		for(var i = 0; i < database.length; i++) {
+			if(stnId != database[i].stn) {
+				continue;
+			} else {
+				$('#ncgraph_title').html('AWS ' + database[i].name + '[' + database[i].stn + ']');
+				break;
+			}
+		}
+
+		var tm = new Array();
+		var tmSummary = new Array();
+		var baseDate = new Date($('#predDate').val().replace(/-/gi, '/') + ' ' + $('#predTime').val() + ':00');
+		
+		var data1 = new Array();
+        var data2 = new Array();
+		var data2_wd = new Array();//풍향 한글
+
+		var table_html = '<tr><th scope="col"></th>';
+		var add_html1 = '';
+		var add_html2 = '';
+
+		switch($('#predItem').val()) {
+			case 'temperature':
+				add_html1 = '<tr><th scope="row">기온</th>';
+				break;
+
+			case 'relhumidity':
+				add_html1 = '<tr><th scope="row">습도</th>';
+				break;
+
+			case 'visibility':
+				add_html1 = '<tr><th scope="row">시정</th>';
+				break;
+
+			case 'wind':
+			    add_html1 = '<tr><th scope="row">풍속</th>';
+                add_html2 = '<tr><th scope="row">풍향</th>';
+				break;
+
+			case 'downward_SW_flux':
+				add_html1 = '<tr><th scope="row">태양광</th>';
+				break;
+		}
+
+		var tmp;
+		$.getJSON(url, '', function(result) {
+			$.ajaxSetup({cache:false, async:false});
+
+			var val;
+			for(var i = 0; i < result.length; i++) { //index로 key가 잡혀있음
+				table_html += '<th scope="col">' + i + '</th>';
+
+				//날짜 설정
+				tm.push(baseDate.getFullYear() + "년 " + lpad((Number(baseDate.getMonth()) + 1), 2, 0) + "월 " + lpad(baseDate.getDate(), 2, 0) + "일 " + lpad(baseDate.getHours(), 2, 0) + "시");
+				tmSummary.push(lpad(baseDate.getHours(), 2, 0) + "H<br/>" + baseDate.getFullYear() + "." + lpad((Number(baseDate.getMonth()) + 1), 2, 0) + "." + lpad(baseDate.getDate(), 2, 0));
+				baseDate.setHours(baseDate.getHours() + 1);
+
+				val = result[i][i][stnId][$('#predItem').val()];
+				if('wind' == $('#predItem').val()) { //바람
+					val = result[i][i][stnId];
+					tmp = parseFloat(val["windspeed"]).toFixed(1);
+					data1.push(tmp);
+
+					var wd = parseFloat(val["winddirection"]).toFixed(1);
+					data2.push({y:0, marker:{symbol:'url(common/img/ico/wind_' + direct_8_en(wd) + '.png)'}});
+					data2_wd.push(direct_8(wd));
+
+					add_html1 += '<td>' + tmp + '</td>';
+                    add_html2 += '<td>' + direct_8(wd) + '</td>';
+
+				} else {
+					tmp = parseFloat(val).toFixed(1);
+					data1.push(tmp);
+					add_html1 += '<td>' + tmp + '</td>';
+				}
+			}
+
+			table_html += '</tr>';
+			if('wind' != $('#predTime').val()){
+				add_html1 += '</tr>';
+				add_html2 += '</tr>';
+			}else{
+				add_html1 += '</tr>';
+			}
+
+			setData(tm, tmSummary, data1, data2, data2_wd, table_html, add_html1, add_html2);
+		});
+	}
+
+	//AWS 지점표시
+	function setEvent() {
+		$('.checkzone').click(function() {
+			console.log(document.getElementById('chkCapital').checked);
+
+			if(document.getElementById('chkCapital').checked) {
+				$('#alphaCapital').css('display', 'block');
+			} else {
+				$('#alphaCapital').css('display', 'none');
+			}
+		});
+
+		$('.checkzone_two').click(function() {
+			console.log(document.getElementById('chkSeoul').checked);
+
+			if(document.getElementById('chkSeoul').checked) {
+				$('#alphaSeoul').css('display', 'block');
+			} else {
+				$('#alphaSeoul').css('display', 'none');
+			}
+		});
+	}
+
+	function close_ncGraph(id) {
+        $('#' + id).hide();
+    }
+
+	$(document).ready(function() {
+		$('#predDate').datetimepicker({
+			format: 'YYYY-MM-DD',
+			allowInputToggle: true,
+			minDate: '2020-09-01',
+			maxDate: '2020-12-20'
+		});
+		$('.pred-Date-addon3').click(function() {
+			$('#predDate').data("DateTimePicker").show();
+		});
+	});
+</script>
+
+</body>
+</html>

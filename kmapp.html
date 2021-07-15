@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Cache-Control" content="no-cache">
+
+<!-- css -->
+<link rel="shortcut icon" href="common/img/ico/favicon.ico"/>
+<link href="common/vender/sb-admin-v2/css/bootstrap.css" rel="stylesheet">
+<link href="common/vender/sb-admin-v2/css/plugins/timeline/timeline.css" rel="stylesheet">
+<link href="common/vender/sb-admin-v2/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="common/vender/bootstrap-datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet">
+<link href="common/vender/spin/spin.css" rel="stylesheet">
+<link href="common/vender/sb-admin-v2/css/sb-admin.css" rel="stylesheet">
+<link href="common/css/default.css" rel="stylesheet">
+<link href="common/css/ui-layout.css" rel="stylesheet">
+
+<!-- javascript -->
+<script src="common/js/common.js" ></script>
+<script src="common/vender/sb-admin-v2/js/jquery-1.10.2.js"></script>
+<script src="common/vender/sb-admin-v2/js/bootstrap.min.js"></script>
+<script src="common/vender/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="common/vender/sb-admin-v2/js/sb-admin.js"></script>
+<script src="common/vender/moment/moment.js"></script>
+
+<script src="common/vender/moment/moment.kr.js"></script>
+<script src="common/vender/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="common/vender/spin/spin.js" ></script>
+
+<title>분석 시스템</title>
+</head>
+
+<body id="__CONTENT_BODY__">
+	<!-- wrap -->
+	<div id="wrap">
+
+		<!-- header -->
+		<div id="header">
+			<div class="header-inner">
+				<h1 class="logo">
+					<a href="index.html">
+						<img src="common/img/logo/logo01.png" alt="책임운영기관 국립기상과학원">
+						<strong>KMAPP 분석 시스템</strong>
+					</a>
+				</h1>
+			</div>
+		</div>
+		<!-- //header -->
+
+		<!-- container -->
+		<div id="container">
+
+			<!-- content -->
+			<div id="content">
+
+				<div class="content">
+					<div class="nav">
+						<div class="tit-wrap">
+							<h2>분석자료 생산</h2>
+						</div>
+						<div class="form-tag">
+							<form id="frmAnal" name="frmAnal">
+								<div class="col">
+									<label class="inp box-radio relative01">
+										<input type="radio" id="analFile" name="analFile" value="surf" checked>
+										<b>지표자료</b>
+									</label>
+									<div class="mt10 relative01-group">
+										<label class="inp"><input type="radio" name="analItem" checked value="temperature"><b>기온(℃)<i></i></b></label>
+										<label class="inp"><input type="radio" name="analItem" value="relhumidity"><b>습도(%)<i></i></b></label>
+										<label class="inp"><input type="radio" name="analItem" value="visibility"><b>시정(km)<i></i></b></label>
+										<label class="inp ml0 mt10"><input type="radio" name="analItem" value="wind"><b>바람(m/s)<i></i></b></label>
+										<label class="inp mt10"><input type="radio" name="analItem" value="downward_SW_flux"><b>태양광(W/㎡)<i></i></b></label>
+									</div>
+									<label class="inp box-radio mt10 relative02">
+										<input type="radio" id="analFile" name="analFile" value="vert">
+										<b>연직자료</b>
+									</label>
+									<div class="mt10 relative02-group">
+										<label class="inp"><input type="radio" name="analItem" value="temperature"><b>기온(℃)<i></i></b></label>
+										<label class="inp"><input type="radio" name="analItem" value="wind"><b>바람(m/s)<i></i></b></label>
+									</div>
+								</div>
+								<div class="col">
+									<label class="inp inp-text">
+										<b>고도(m)</b>
+										<input type="text" name="analLevel" id="analLevel">
+									</label>
+								</div>
+								<div class="col">
+									<strong class="col-tit">시간(UTC)</strong>
+									<div class="mt10">
+										<label class="inp"><input type="checkbox" name="chkAll" checked><b>전체<i></i></b></label>
+										<label class="inp"><input type="checkbox" name="analTime[]" value="00" checked><b>00<i></i></b></label>
+										<label class="inp"><input type="checkbox" name="analTime[]" value="03" checked><b>03<i></i></b></label>
+										<label class="inp"><input type="checkbox" name="analTime[]" value="06" checked><b>06<i></i></b></label>
+										<label class="inp"><input type="checkbox" name="analTime[]" value="09" checked><b>09<i></i></b></label>
+										<br>
+										<label class="inp ml0 mt10"><input type="checkbox" name="analTime[]" value="12" checked><b>12<i></i></b></label>
+										<label class="inp mt10"><input type="checkbox" name="analTime[]" value="15" checked><b>15<i></i></b></label>
+										<label class="inp mt10"><input type="checkbox" name="analTime[]" value="18" checked><b>18<i></i></b></label>
+										<label class="inp mt10"><input type="checkbox" name="analTime[]" value="21" checked><b>21<i></i></b></label>
+									</div>
+								</div>
+								<div class="col">
+									<strong class="col-tit">분석방법</strong>
+									<select name="analType" id="analType">
+										<option value="avg" selected>평균</option>
+										<option value="max">최대</option>
+										<option value="min">최소</option>
+									</select>
+									<strong class="col-tit">기간</strong>
+									<select name="periodType" id="periodType">
+										<option value="days" selected>일별</option>
+										<option value="months">월별</option>
+										<option value="years">년별</option>
+									</select>
+									<strong class="col-tit">시작</strong>
+									<div class="form-group input-group input-append date date-ymdhm" data-date-format="yyyy-mm-dd">
+										<input type="text" class="form-control" name="analStart" id="analStart" />
+										<span class="input-group-addon add-on pred-Date-addon1">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+									<strong class="col-tit">종료</strong>
+									<div class="form-group input-group input-append date date-ymdhm" data-date-format="yyyy-mm-dd">
+										<input type="text" class="form-control" name="analEnd" id="analEnd" />
+										<span class="input-group-addon add-on pred-Date-addon2">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+									<strong class="col-tit">영역</strong>
+									<select name="analArea" id="analArea">
+										<option value="Hkor" selected>대한민국</option>
+										<option value="Seoul">서울</option>
+										<option value="Daejeon">대전</option>
+										<option value="Daegu">대구</option>
+										<option value="Busan">부산</option>
+										<option value="Gwangju">광주</option>
+										<option value="Jeju">제주</option>
+										<option value="Incheon">인천</option>
+										<option value="Ulsan">울산</option>
+									</select>
+								</div>
+							</form>
+						</div>
+						<div class="btn-wrap">
+							<button type="button" class="btn-large btn-blue" id="btnSearch">분석자료 생산</button>
+						</div>
+					</div>
+					<div class="section mt0">
+						<form id="frmColor" name="frmColor">
+							<div class="tit-wrap">
+								<h2>그래픽 옵션</h2>
+							</div>
+							<div class="form-tag form-flex mt20">
+								<strong class="col-tit">색상</strong>
+								<select id="color" name="color">
+									<option value="None" selected>Default</option>
+									<option value="BlueRed">Blue-Red</option>
+									<option value="BlueYellowRed">Blue-Yellow-Red</option>
+									<option value="WhiteBlue">White-Blue</option>
+									<option value="WhiteYellowOrangeRed">White-Yellow-Orange-Red</option>
+								</select>
+								<strong class="col-tit">간격</strong>
+								<input type="text" class="ac" style="flex:1 0 55px;max-width:55px;" id="vstep" name="vstep" >
+								<strong class="col-tit">최소</strong>
+								<input type="text" class="ac" style="flex:1 0 55px;max-width:55px;" id="vmin" name="vmin" >
+								<strong class="col-tit">최대</strong>
+								<input type="text" class="ac" style="flex:1 0 55px;max-width:55px;" id="vmax" name="vmax">
+								<strong class="col-tit">크기</strong>
+								<select style="flex:1 0 65px;max-width:65px;" id="legendSize" name="legendSize">
+									<option value="1" selected>1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select>
+								<strong class="col-tit">위치</strong>
+								<select style="flex:1 0 100px;max-width:100px;" id="legendPosition" name="legendPosition">
+									<option value="vertical">세로막대</option>
+									<option value="horizontal">가로막대</option>
+								</select>
+							</div>
+							<div class="btn-wrap mt20">
+								<div class="fr">
+									<button type="button" class="btn-large btn-blue" id="btnDraw">그리기</button>
+									<button type="button" class="btn-large btn-blue" id="btnDataDown">이미지 다운로드</button>
+									<button type="button" class="btn-large btn-blue" id="btnReset">옵션설정 초기화</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="section">
+						<div class="map-thumb" id="dvImageArea">
+							<img class="NO-CACHE" src="common/img/thumb/kmapp.png" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //content -->
+			
+			<!-- footer -->
+			<div id="footer" class="footer">
+				<div>우. 63568 제주특별자치도 서귀포시 서호북로 33</div><div>|</div><div>COPYRIGHT ⓒ 2017 NATIONAL INSTITUTE OF METEOROLOGICAL SCIENCES. ALL RIGHTS RESERVED.</div>
+			</div>
+			<!-- //footer -->
+
+		</div>
+
+	</div>
+	<!-- //wrap -->
+	
+	<!-- Log Modal -->
+	<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="section">
+					<div class="tit-wrap">
+						<h2>분석자료 생산 진행상황</h2>
+						<button type="button" class="modal-close" data-dismiss="modal"><img src="common/img/ico/btn-gnb-close.svg" alt=""></button>
+					</div>
+					<div class="modal-body-scroll">
+						<ul class="log-list">
+							<li id="load">
+								<strong>자료 로딩중... (0/0)</strong>
+								<div class="img img-complete"><span class="blind">완료</span></div>
+							</li>
+							<li id="anal">
+								<strong>자료 분석중... (0/0)</strong>
+								<div class="img img-loading"><span class="blind">완료</span></div>
+							</li>
+							<li id="img">
+								<strong>분석자료 이미지 생산중... (0/1)</strong>
+								<div class="img img-loading"><span class="blind">완료</span></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Core Scripts - Include with every page -->
+<!-- <script src="common/js/common.js" ></script> -->
+
+<script src="common/vender/sb-admin-v2/js/jquery-1.10.2.js"></script>
+<script src="common/vender/sb-admin-v2/js/bootstrap.min.js"></script>
+<script src="common/vender/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+<script src="common/vender/moment/moment.js"></script>
+<script src="common/vender/moment/moment.kr.js"></script>
+<script src="common/vender/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="common/vender/spin/spin.js" ></script>
+
+<!-- SB Admin Scripts - Include with every page -->
+<script src="common/vender/sb-admin-v2/js/sb-admin.js"></script>
+<script>
+	var _imgURL = '';
+	var _timestemp = '';
+	var _logCount = 0;
+	var _tot = 0;
+	var _load = 0;
+	var _anal = 0;
+	var _img = 0;
+	var _timer;
+	var _logInfo = new Array();
+
+	function stopLogInfo() {
+		clearInterval(_timer);
+		$('#logModal').modal('hide');
+	}
+
+	var flag = true;
+	function getLogInfo() {
+		_timer = setInterval(function() {
+			if(flag) {
+				flag = false;
+			} else {
+				return;
+			}
+
+			var param = 'sno=' + _timestemp;
+			$.getJSON('apps/logProcess.php', param, function(result) {
+				$.ajaxSetup({cache:false});
+
+				if(result.resultCode == '9999') { //check error
+					alert(result.resultMsg);
+					stopLogInfo();
+					flag = true;
+					return;
+				}
+
+				var logData = result.resultMsg;
+				var info = null;
+
+				if(logData.length == 0) { //check log contents
+					flag = true;
+					return;
+				}
+
+				var offset = 0;
+				if(_logCount != 0) { //이전 길이가 있는가?
+					if(_logCount == logData.length) { //이전 길이와 같은가?
+						flag = true;
+						return;
+
+					} else { //이전 길이와 다르다면?
+						offset = _logCount;
+						_logCount = logData.length;
+					}
+
+				} else {
+					_logCount = logData.length;
+				}
+
+				//console.log('offset:' + offset + ' _logCount:' + _logCount + ' logData.length:' + logData.length);
+
+				for(var i = offset; i < logData.length; i++) {
+					info = logData[i].split('|');
+
+					switch(info[0]) {
+						/*
+						case 'OPT': //옵션설정 완료
+							$('#opt').children('.timeline-badge').html('<i class="fa fa-check"></i>');
+							break;
+						*/
+
+						case 'TOT': //총 분석파일 개수
+							_tot = parseInt(info[1]);
+							$('#load').children().eq(0).text('자료 로딩중... (0/' + _tot + ')');
+							break;
+
+						case 'LOAD': //분석파일 읽은 개수
+							_load += 1;
+
+							if(_tot == _load) {
+								$('#load').children().eq(0).text('자료 로딩완료! (' + _load + '/' + _tot + ')');
+								$('#load').children().eq(1).attr('class', 'img img-complete');
+
+							} else {
+								$('#load').children().eq(0).text('자료 로딩중... (' + _load + '/' + _tot + ')');
+							}
+							break;
+
+						case 'ANAL': //분석한 파일 개수
+							_anal += 1;
+							if(info[1] != 'complete') {
+								$('#anal').children().eq(0).text('자료 로딩중... (' + _anal + '/1)');
+
+							} else {
+								$('#anal').children().eq(0).text('자료 분석완료! (' + _anal + '/1)');
+								$('#anal').children().eq(1).attr('class', 'img img-complete');
+							}
+							break;
+
+						case 'IMG': //분석자료 이미지 생산
+							$('#img').children().eq(0).text('분석자료 이미지 생산완료!');
+						    $('#img').children().eq(1).attr('class', 'img img-complete');
+
+							var imgFilename = info[1].split('/');
+							$('#dvImageArea').empty();
+							$('#dvImageArea').append('<img src="' + _imgURL + imgFilename[imgFilename.length - 1] + '">');
+
+							stopLogInfo();
+							$('#load').css('display', 'block');
+				            $('#anal').css('display', 'block');
+							break;
+
+						case 'ERR': //로그 오류메시지
+							alert(info[1]);
+							stopLogInfo();
+							break;
+					}
+				}
+
+				flag = true;
+			});
+		}, 1000);
+	}
+
+	function search() {
+		var value = '';
+		var param = '';
+
+		var analFile = $('input[name="analFile"]:checked').val();
+		console.log(analFile);
+		if('vert' == analFile) {
+			if(checkValue($('#analLevel').val())) {
+				alert('고도(m) 값은 필수 입니다');
+				$('#analLevel').focus();
+				return;
+			}
+		}
+		
+		//선택 시간확인
+		if(0 == $('input[name="analTime[]"]:checked').size()) {
+			alert('시간(UTC) 값은 필수 입니다');
+			return;
+		}
+
+		//시작, 종료일 확인
+		if(checkValue($('#analStart').val())) {
+			alert('[시작일] 값은 필수 입니다');
+			return;
+		}
+
+		if(checkValue($('#analEnd').val())) {
+			alert('[종료일] 값은 필수 입니다');
+			return;
+		}
+
+        //시작, 종료일 크기 비교
+		if($('#analStart').val() > $('#analEnd').val()) {
+			alert('[시작일]이 [종료일] 이전 날짜 입니다.');
+			return;
+		}
+
+		var vstep = $('#vstep').val();
+		var vmin = $('#vmin').val();
+		var vmax = $('#vmax').val();
+
+		if(!isEmpty(vstep) || !isEmpty(vmin) || !isEmpty(vmax)) {
+			if(isEmpty(vstep)) {
+				alert('[간격] 값이 없습니다.');
+				$('#vstep').focus();
+				return;
+			}
+
+			if(isEmpty(vmin)) {
+				alert('[최소] 값이 없습니다.');
+				$('#vmin').focus();
+				return;
+			}
+
+			if(isEmpty(vmax)) {
+				alert('[최대] 값이 없습니다.');
+				$('#vmax').focus();
+				return;
+			}
+		}
+
+		if(!isEmpty(vstep) && !isEmpty(vmin) && !isEmpty(vmax)) { //모든 값이 비어있는지 않다면
+			if(!$.isNumeric(vstep)) {
+				alert('[간격] 값이 숫자가 아닙니다.');
+				$('#vstep').focus();
+				return;
+			}
+
+			if(!$.isNumeric(vmin)) {
+				alert('[최소] 값이 숫자가 아닙니다.');
+				$('#vmin').focus();
+				return;
+			}
+
+			if(!$.isNumeric(vmax)) {
+				alert('[최대] 값이 숫자가 아닙니다.');
+				$('#vmax').focus();
+				return;
+			}
+
+			if(vmin >= vmax) {
+				alert('[최소] 값은 [최대] 값보다 작아야 합니다.');
+				$('#vmin').focus();
+				return;
+			}
+		}
+
+		param = $('#frmAnal').serialize() + '&' + $('#frmColor').serialize();
+		console.log(param);
+
+		startSpinner('__CONTENT_BODY__');
+		$.getJSON('apps/optionProcess.php', param, function(result) {
+			$.ajaxSetup({cache:false});
+
+			//응답이 왔으면 spinner 종료
+			__SUBMIT_FLAG__ = true;
+			if(typeof __SPINNER__ != 'undefined') {
+				__SPINNER_PANEL__.remove();
+				__SPINNER__.stop();
+			}
+
+			console.log(result);
+			if(result.resultCode == '0000') {
+				/* "images/20200909/1599644330/" */
+				_imgURL = result.resultMsg;
+				_timestemp = _imgURL.split('/')[2];
+
+				//변수 초기화
+				_logCount = 0;
+				_tot = 0;
+				_load = 0;
+				_anal = 0;
+				_img = 0;
+				_timer = null;
+				_logInfo = new Array();
+
+				//로그모달 내용 초기화
+				$('#load').children().eq(0).text('자료 로딩중... (0/0)');
+				$('#load').children().eq(1).attr('class', 'img img-loading');
+				$('#anal').children().eq(0).text('자료 분석중... (0/0)');
+				$('#anal').children().eq(1).attr('class', 'img img-loading');
+				$('#img').children().eq(0).text('분석자료 이미지 생산중... (0/1)');
+				$('#img').children().eq(1).attr('class', 'img img-loading');
+
+				//로그모달 표출
+				$('#logModal').modal({backdrop: 'static', keyboard: false});
+
+				//log 조회 기능 실행
+				getLogInfo();
+
+			} else { //성공이 아니라면 오류메시지 출력
+				alert(result.resultCode);
+			}
+		});
+	}
+	
+	$('#btnSearch').click(function(event) { //분석자료 생산
+		search();
+	});
+
+	$('#btnDraw').click(function(event) { //그래픽 옵션 수정
+		if(_timestemp == undefined || _timestemp == null || _timestemp == '') {
+			alert('[생성된 분석자료가 없습니다.]');
+			return;
+		}
+
+		var param = 'sno=' + _timestemp + '&' + $('#frmColor').serialize();
+
+		startSpinner('__CONTENT_BODY__');
+		$.getJSON('apps/updateImgOption.php', param, function(result) {
+			$.ajaxSetup({cache:false});
+
+			//응답이 왔으면 spinner 종료
+			__SUBMIT_FLAG__ = true;
+			if(typeof __SPINNER__ != 'undefined') {
+				__SPINNER_PANEL__.remove();
+				__SPINNER__.stop();
+			}
+
+			console.log(result);
+			if(result.resultCode == '0000') {
+				//변수 초기화
+				_logCount = 0;
+				_tot = 0;
+				_load = 0;
+				_anal = 0;
+				_img = 0;
+				_timer = null;
+				_logInfo = new Array();
+
+				//로그모달 내용 초기화
+				$('#load').css('display', 'none');
+				$('#anal').css('display', 'none');
+				$('#img').children().eq(0).text('분석자료 이미지 생산중... (0/1)');
+				$('#img').children().eq(1).attr('class', 'img img-loading');
+
+				//로그모달 표출
+				$('#logModal').modal({backdrop: 'static', keyboard: false});
+
+				//log 조회 기능 실행
+				getLogInfo();
+
+			} else { //성공이 아니라면 오류메시지 출력
+				alert(result.resultCode);
+			}
+		});
+	});
+
+	$('#btnDataDown').click(function(event) { //이미지 다운로드 (추후 데이터 다운로드)
+		var imgSrc = $('#dvImageArea img:first-child').attr('src');
+		var a = document.createElement('a');
+		var filename = imgSrc.split('/');
+
+		a.href = imgSrc;
+		a.download = filename[filename.length - 1];
+
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+	});
+
+	$('#btnReset').click(function(event) { //그래픽 옵션 초기화
+		$('#frmColor')[0].reset();
+	});
+
+	$('#analLevel').keyup(function(event) {
+		$(this).val($(this).val().replace(/[^0-9.]/g, ''));
+	});
+	
+	$('input[name="chkAll"]').click(function(event) {
+		var checkList = $('input[name="analTime[]"]').toArray();
+		var isChecked = $('input[name="chkAll"]').is(":checked");
+
+		checkList.forEach(function(entry) {
+			entry.checked = ( isChecked ) ? true : false;
+		});
+	});
+	
+	$('input[name="analTime[]"]').click(function(event) {
+		var chkAll = $('input[name="chkAll"]')[0];
+		if( event.target.checked === false ) {
+			chkAll.checked = false;
+		} else {
+			var checkList = $('input[name="analTime[]"]').toArray();
+			var isAll = true;
+
+			checkList.forEach(function(entry) {
+				if( entry.checked === false ) isAll = false;
+			});
+			chkAll.checked = isAll;
+		}
+	});
+	
+	$('#periodType').change(function(event) {
+		$('#analStart').data('DateTimePicker').date(null);
+		$('#analEnd').data('DateTimePicker').date(null);
+
+		var periodFormat = '';
+		var minViewMode = $(this).val();
+		switch($(this).val()) {
+			case 'days':
+				periodFormat = 'YYYY-MM-DD';
+			break;
+
+			case 'months':
+				periodFormat = 'YYYY-MM';
+			break;
+
+			case 'years':
+				periodFormat = 'YYYY';
+			break;
+		}
+
+		$('#analStart').data('DateTimePicker').viewMode($(this).val());
+		$('#analStart').data('DateTimePicker').format(periodFormat);
+
+		$('#analEnd').data('DateTimePicker').viewMode($(this).val());
+		$('#analEnd').data('DateTimePicker').format(periodFormat);
+
+		//계절별 처리를 어떻게 할지 필요 및 월, 년에 따른 기간 산정 필요 php 처리 필요
+	});
+	
+	$('.pred-Date-addon2').click(function() {
+		$('#analEnd').data("DateTimePicker").show();
+	});
+	
+	$('.pred-Date-addon1').click(function() {
+		$('#analStart').data("DateTimePicker").show();
+	});
+	
+	$('.box-radio input').on('click', function (){
+		var par = $(this).closest('.box-radio')
+		if ($(this).prop('checked', true)) {
+			if (par.hasClass('relative01')){
+				$('.relative02-group input').prop('checked',false);
+				$('.relative01-group .inp:first-child input').prop('checked',true);
+				document.getElementById('analLevel').placeholder = '';
+			}
+			if (par.hasClass('relative02')){
+				$('.relative01-group input').prop('checked',false);
+				$('.relative02-group .inp:first-child input').prop('checked',true);
+				document.getElementById('analLevel').placeholder = '5 ~ 2991.6';
+			}
+		}
+	});
+	
+	$('.relative01-group input').on('click', function (){
+		document.getElementById('analLevel').placeholder = '';
+		$('.relative02-group input').prop('checked',false);
+		$('.relative02 input').prop('checked',false);
+		$('.relative01 input').prop('checked',true);
+	});
+	
+	$('.relative02-group input').on('click', function (){
+		if('temperature' == this.value) {
+			document.getElementById('analLevel').placeholder = '5 ~ 2991.6';
+		} else if('wind' == this.value) {
+			document.getElementById('analLevel').placeholder = '2.5 ~ 2893.3';
+		}
+		
+		$('.relative01-group input').prop('checked',false);
+		$('.relative01 input').prop('checked',false);
+		
+		$('.relative02 input').prop('checked',true);
+	});
+
+	$(document).ready(function() {		
+		$('#analStart').datetimepicker({
+			format: 'YYYY-MM-DD',
+			allowInputToggle: true,
+			minDate: '2016-07-01',
+			maxDate: '2020-06-30'
+		});
+		
+		$('#analEnd').datetimepicker({
+			format: 'YYYY-MM-DD',
+			allowInputToggle: true,
+			minDate: '2016-07-01',
+			maxDate: '2020-06-30'
+		});
+	});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+#imagePlayer { display: flex; justify-content: center; }
+#imagePlayerButton { display: flex; align-items: center; }
+
+#imagePlayerList ul { display: flex; align-items: center; flex-direction: row; flex-wrap: wrap; list-style: none; margin-top: revert; margin-bottom: 0px; max-width: 1200px; }
+#imagePlayerList ul li { margin: 2px; width: 50px; text-align: center; }
+
+#imagePlayerList ul li a { display: block; padding: 3px; background-color: #ddd; color: #000; }
+#imagePlayerList ul li a:hover { text-decoration: none; background-color: #257ec2; color: #fff; }
+#imagePlayerList ul li a.on { background-color: #257ec2; color: #fff; }
+
+#imageBox { display: flex; justify-content: center; margin-top: 30px; }
+#imageBox img { max-width:100%; height: auto; }
